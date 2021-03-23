@@ -8,6 +8,8 @@ This repository contains code and models for the paper: [Unsupervised Multi-hop 
 
 - Pretraining a multi-hop QA model with our generated data would greatly reduce the demand for human-annotated training data for multi-hop QA. 
 
+### Introduction
+
 The model first defines a set of **basic operators** to
 retrieve / generate relevant information from each
 input source or to aggregate different information, as follows. 
@@ -18,4 +20,6 @@ input source or to aggregate different information, as follows.
 
 Afterwards, we define six **Reasoning Graphs**. Each corresponds to one type of multihop question and is formulated as a computation graph built upon the operators. We generate multihop question-answer pairs by executing the reasoning graph. 
 
-![Basic Operators](Resource/framework.png)
+<p align="center">
+<img src=Resource/framework.png width=700/>
+</p>
