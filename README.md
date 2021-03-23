@@ -8,7 +8,7 @@ This repository contains code and models for the paper: [Unsupervised Multi-hop 
 
 - Pretraining a multi-hop QA model with our generated data would greatly reduce the demand for human-annotated training data for multi-hop QA. 
 
-### Introduction
+## Introduction
 
 The model first defines a set of **basic operators** to
 retrieve / generate relevant information from each
@@ -23,3 +23,22 @@ Afterwards, we define six **Reasoning Graphs**. Each corresponds to one type of 
 <p align="center">
 <img src=Resource/framework.png width=700/>
 </p>
+
+## Requirements
+
+## Reference
+Please cite the paper in the following format if you use this dataset during your research.
+
+```
+@inproceedings{pan-etal-2021-MQA-QG,
+  title={Unsupervised Multi-hop Question Answering by Question Generation},
+  author={Liangming Pan, Wenhu Chen, Wenhan Xiong, Min-Yen Kan, William Yang Wang},
+  booktitle = {Annual Conference of the North American Chapter of the Association for Computational Linguistics (NAACL)},
+  address = {Online},
+  month = {June},
+  year = {2021}
+}
+```
+
+## Q&A
+If you encounter any problem, please either directly contact the first author or leave an issue in the github repo.
