@@ -12,7 +12,9 @@ The model first defines a set of **basic operators** to
 retrieve / generate relevant information from each
 input source or to aggregate different information, as follows. 
 
-<img src=Resource/operators.png width=700 class="center"/>
+<p align="center">
+<img src=Resource/operators.png width=700/>
+</p>
 
 Afterwards, we define six **Reasoning Graphs**. Each corresponds to one type of multihop question and is formulated as a computation graph built upon the operators. We generate multihop question-answer pairs by executing the reasoning graph. 
 
