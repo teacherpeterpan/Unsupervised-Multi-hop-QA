@@ -21,7 +21,7 @@ input source or to aggregate different information, as follows.
 Afterwards, we define six **Reasoning Graphs**. Each corresponds to one type of multihop question and is formulated as a computation graph built upon the operators. We generate multihop question-answer pairs by executing the reasoning graph. 
 
 <p align="center">
-<img src=Resource/framework.png width=700/>
+<img src=Resource/framework.png width=800/>
 </p>
 
 ## Requirements
