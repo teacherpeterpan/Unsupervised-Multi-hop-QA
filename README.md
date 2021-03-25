@@ -30,6 +30,8 @@ Afterwards, we define six **Reasoning Graphs**. Each corresponds to one type of 
 - torch 1.7.1
 - tqdm 4.49.0
 - transformers 4.3.3
+- stanza 1.1.1
+- nltk 3.5
 
 ## Data Preparation
 
@@ -80,9 +82,31 @@ cd HYBRID_HOME
 git clone https://github.com/wenhuchen/WikiTables-WithLinks
 ```
 
+## Operators
+
+Here are the codes that test our key operators: `QGwithAns` and `DescribeEnt`. 
+
+### a) QGwithAns
+
+QGwithAns generate a single-hop question Q with answer A from the input text D. We implement this module based on the pretrained QG model from [patil-suraj](https://github.com/patil-suraj/question_generation), a Google T5 model finetuned on the SQuAD 1.1 dataset. 
+
+You could test this module by running the following python codes: 
+```python
+from MQA_QG.Operators import T5_QG
+
+test_passage = '''Jenson Alexander Lyons Button (born 19 January 1980) is a British racing driver and former Formula One driver. He won the 2009 Formula One World Championship, driving for Brawn GP.'''
+
+nlp = T5_QG.pipeline("question-generation", model='valhalla/t5-base-qg-hl', qg_format="highlight")
+
+print(nlp.qg_without_answer(test_passage))
+print(nlp.qg_with_answer_text(test_passage, "19 January 1980"))
+```
+
 ## Multi-hop Question Generation
 
 Coming Soon...
+
+
 
 ## Unsupervised Multi-hop QA
 
