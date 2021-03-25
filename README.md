@@ -26,6 +26,43 @@ Afterwards, we define six **Reasoning Graphs**. Each corresponds to one type of 
 
 ## Requirements
 
+- Python 3.7.3
+- torch 1.7.1
+- tqdm 4.49.0
+- transformers 4.3.3
+
+## Data Preparation
+
+### a) HotpotQA
+
+First, download the raw dataset of hotpotQA. 
+
+```shell
+HOTPOT_HOME=./Data/HotpotQA
+mkdir -p $HOTPOT_HOME/raw
+mkdir -p $HOTPOT_HOME/dataset
+cd $HOTPOT_HOME/raw
+wget http://curtis.ml.cmu.edu/datasets/hotpot/hotpot_train_v1.1.json
+wget http://curtis.ml.cmu.edu/datasets/hotpot/hotpot_dev_distractor_v1.json
+```
+
+Then, run the following code to preprocess the raw dataset. 
+
+```shell
+python prep_data_hotpotQA.py \
+  --train_dir $HOTPOT_HOME/raw/hotpot_train_v1.1.json \
+  --dev_dir $HOTPOT_HOME/raw/hotpot_dev_distractor_v1.json \
+  --output_dir $HOTPOT_HOME/dataset/
+```
+
+You would be able to get the following files in `./Data/HotpotQA/dataset/`
+```
+train.src.txt
+train.qa.txt
+dev.src.txt
+dev.qa.txt
+```
+
 ## Reference
 Please cite the paper in the following format if you use this dataset during your research.
 

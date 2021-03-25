@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Dataset
+Data/HotpotQA/*
+Data/HybridQA/*
+
 # C extensions
 *.so
 
