@@ -110,7 +110,7 @@ DescribeEnt generate a sentence *S* that describes the given entity *E* based on
 <img src=Resource/table2text.png width=600/>
 </p>
 
-We finetune the GPT2 model on the [ToTTo dataset](https://github.com/google-research-datasets/ToTTo) (Parikh et al., 2020), a large-scale dataset of controlled table-to-text generation. Our fine-tuned model can be downloaded [here](). After downloading the finetuned model, put it under the `Pretrained_Models` directory. Then you could test this module by running the following python codes: 
+We finetune the GPT2 model on the [ToTTo dataset](https://github.com/google-research-datasets/ToTTo) (Parikh et al., 2020), a large-scale dataset of controlled table-to-text generation. Our fine-tuned model can be downloaded [here](https://drive.google.com/file/d/1MREzgOdXcFEo-wmDmxLqW7YFCuMreRkQ/). After downloading the finetuned model, put it under the `Pretrained_Models` directory. Then you could test this module by running the following python codes: 
 ```python
 from MQA_QG.Operators.Table_to_Text import get_GPT2_Predictor
 
