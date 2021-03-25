@@ -102,11 +102,13 @@ print(nlp.qg_without_answer(test_passage))
 print(nlp.qg_with_answer_text(test_passage, "19 January 1980"))
 ```
 
+### b) DescribeEnt
+
+DescribeEnt generate a sentence S that describes the given entity E based on the information of the table T. 
+
 ## Multi-hop Question Generation
 
 Coming Soon...
-
-
 
 ## Unsupervised Multi-hop QA
 
