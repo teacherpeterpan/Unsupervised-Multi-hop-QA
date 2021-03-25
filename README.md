@@ -63,6 +63,24 @@ dev.src.txt
 dev.qa.txt
 ```
 
+### b) HybridQA
+
+Download all the tables and passages of HybridQA into your data folder. 
+
+```shell
+HYBRID_HOME=./Data/HybridQA
+cd HYBRID_HOME
+git clone https://github.com/wenhuchen/WikiTables-WithLinks
+```
+
+## Multi-hop Question Generation
+
+Coming Soon...
+
+## Unsupervised Multi-hop QA
+
+Coming Soon...
+
 ## Reference
 Please cite the paper in the following format if you use this dataset during your research.
 
