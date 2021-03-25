@@ -33,6 +33,13 @@ Afterwards, we define six **Reasoning Graphs**. Each corresponds to one type of 
 
 ## Data Preparation
 
+Make the following data directories: 
+```shell
+mkdir -p ./Data
+mkdir -p ./Data/HotpotQA
+mkdir -p ./Data/HybridQA
+```
+
 ### a) HotpotQA
 
 First, download the raw dataset of hotpotQA. 
