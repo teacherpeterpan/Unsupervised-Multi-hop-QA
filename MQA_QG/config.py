@@ -2,9 +2,9 @@
 Configuration of our project.
 """
 import argparse
-from QuestionRealization import T5_QG
-from QuestionRealization.Table_to_Text import get_GPT2_Predictor
-from QuestionRealization.BERT_fill_blank import BERT_fill_blanker
+from Operators import T5_QG
+from Operators.Table_to_Text import get_GPT2_Predictor
+from Operators.BERT_fill_blank import BERT_fill_blanker
 import stanza
 
 ###### Global Settings

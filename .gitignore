@@ -6,6 +6,7 @@ __pycache__/
 # Dataset
 Data/HotpotQA/*
 Data/HybridQA/*
+Pretrained_Models/*.pt
 
 # C extensions
 *.so

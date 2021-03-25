@@ -11,18 +11,18 @@ from .utils import sample_sequence
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
-from allennlp.predictors import Predictor
+# from allennlp.predictors import Predictor
 
-class Seq2Seq_Table2Text(object):
-    def __init__(self, model_path):
-        self.predictor = Predictor.from_path(model_path)
+# class Seq2Seq_Table2Text(object):
+#     def __init__(self, model_path):
+#         self.predictor = Predictor.from_path(model_path)
 
-    def predict_output(self, table_input):
-        results = self.predictor.predict(table_input)
-        result_list = []
-        for ele in results['predicted_tokens']:
-            result_list.append(' '.join(ele))
-        return result_list
+#     def predict_output(self, table_input):
+#         results = self.predictor.predict(table_input)
+#         result_list = []
+#         for ele in results['predicted_tokens']:
+#             result_list.append(' '.join(ele))
+#         return result_list
 
 class GPT2_Table2Text(object):
     def __init__(self, args):
@@ -84,7 +84,7 @@ def get_GPT2_Predictor(model_path, num_samples = 3, gpu_index = 0):
     return predictor
 
 if __name__ == "__main__":
-    predictor = get_GPT2_Predictor('models/GPT_ep9.pt')
+    predictor = get_GPT2_Predictor('../../Pretrained_Models/table2text_GPT2_medium_ep9.pt')
     test_input = '''The table title is 2004 United States Grand Prix . The Pos is 4 . The Driver is Jenson Button . Start describing Jenson Button : '''
     results = predictor.predict_output(test_input)
     print(results)

@@ -49,11 +49,8 @@ def sample_sequence(model, length, context, args, num_samples=1, temperature=1, 
     with torch.no_grad():
         for _ in range(length):
             outputs = model(generated, *args)
-            if isinstance(outputs, list) or isinstance(outputs, tuple):
-                next_token_logits = outputs[0][:, -1, :] / (temperature if temperature > 0 else 1.)
-            else:
-                next_token_logits = outputs[:, -1, :] / (temperature if temperature > 0 else 1.)
-
+            next_token_logits = outputs[0][:, -1, :] / (temperature if temperature > 0 else 1.)
+            
             #next_token_logits[:, generated[-1].tolist()] /= repetition
             if repetition is not None:
                 for b in range(batch_size):

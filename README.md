@@ -88,7 +88,7 @@ Here are the codes that test our key operators: `QGwithAns` and `DescribeEnt`.
 
 ### a) QGwithAns
 
-QGwithAns generate a single-hop question Q with answer A from the input text D. We implement this module based on the pretrained QG model from [patil-suraj](https://github.com/patil-suraj/question_generation), a Google T5 model finetuned on the SQuAD 1.1 dataset. 
+QGwithAns generate a single-hop question *Q* with answer *A* from the input text *D*. We implement this module based on the pretrained QG model from [patil-suraj](https://github.com/patil-suraj/question_generation), a Google T5 model finetuned on the SQuAD 1.1 dataset. 
 
 You could test this module by running the following python codes: 
 ```python
@@ -104,7 +104,22 @@ print(nlp.qg_with_answer_text(test_passage, "19 January 1980"))
 
 ### b) DescribeEnt
 
-DescribeEnt generate a sentence S that describes the given entity E based on the information of the table T. 
+DescribeEnt generate a sentence *S* that describes the given entity *E* based on the information of the table *T*. We implement this using the [GPT-TabGen model](https://arxiv.org/pdf/2004.07347.pdf) (Chen et al., 2020a). The model first uses template to flatten the table *T* into a document *PT* and then feed *PT* to the pre-trained GPT-2 model to generate the output sentence *S*. The framework is as follows. 
+
+<p align="center">
+<img src=Resource/table2text.png width=600/>
+</p>
+
+We finetune the GPT2 model on the [ToTTo dataset](https://github.com/google-research-datasets/ToTTo) (Parikh et al., 2020), a large-scale dataset of controlled table-to-text generation. Our fine-tuned model can be downloaded [here](). After downloading the finetuned model, put it under the `Pretrained_Models` directory. Then you could test this module by running the following python codes: 
+```python
+from MQA_QG.Operators.Table_to_Text import get_GPT2_Predictor
+
+predictor = get_GPT2_Predictor('./Pretrained_Models/table2text_GPT2_medium_ep9.pt', num_samples = 3)
+flattened_table = '''The table title is Netherlands at the European Track Championships . The Medal is Bronze . The Championship is 2011 Apeldoorn . The Name is Kirsten Wild . The Event is Women's omnium . Start describing Kirsten Wild : '''
+results = predictor.predict_output(flattened_table)
+print(results)
+```
+
 
 ## Multi-hop Question Generation
 
