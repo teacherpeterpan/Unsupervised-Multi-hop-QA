@@ -32,6 +32,7 @@ Afterwards, we define six **Reasoning Graphs**. Each corresponds to one type of 
 - transformers 4.3.3
 - stanza 1.1.1
 - nltk 3.5
+- dateparser 1.0.0
 
 ## Data Preparation
 

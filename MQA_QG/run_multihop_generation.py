@@ -10,12 +10,11 @@ import json
 from tqdm import tqdm
 
 # Stanza NLP object
-stanza_nlp = stanza.Pipeline('en', use_gpu=True)
-
+# stanza_nlp = stanza.Pipeline('en', use_gpu=True)
 
 def construct_sample(q_id, question, table_id, q_type, multi_ans_node = False):
     data_sample = {}
-    data_sample['table_id'] = int(table_id)
+    data_sample['table_id'] = str(table_id)
     data_sample['question'] = question['question']
     data_sample['answer-text'] = question['answer_text'].strip()
     # note: answer node is a list of list!
@@ -49,21 +48,24 @@ def generate_for_HybridQA(args):
 
     all_questions_json = []
     for table_id, sample_table in tqdm(all_tables):
-        #for i in range(3):
-        #    ques_list = Generate_Table_to_Text_Question(sample_table)
-        # for i in range(1):
-        #     ques_list = Generate_Text_to_Table_Question(sample_table)
-        # for i in range(1):
-        #     ques_list = Generate_Text_to_Table_to_Text_Question(sample_table)
-        # for i in range(1):
-        #     ques_list = Generate_Text_Only_Question(sample_table)
-        for i in range(1):
+        ques_list = None
+        if QUESTION_TYPE == 'table2text':
+            ques_list = Generate_Table_to_Text_Question(sample_table)
+        elif QUESTION_TYPE == 'text2table':
+            ques_list = Generate_Text_to_Table_Question(sample_table)
+        elif QUESTION_TYPE == 'text_only':
+            ques_list = Generate_Text_Only_Question(sample_table)
+        elif QUESTION_TYPE == 'table_only':
             ques_list = Generate_Table_Only_Question(sample_table)
-            if not ques_list is None:
-                for ques in ques_list:
-                    data_sample = construct_sample(global_id, ques, table_id, 'table')
-                    all_questions_json.append(data_sample)
-                    global_id += 1
+        else:
+            raise(NotImplementedError)
+        
+        if not ques_list is None:
+            for ques in ques_list:
+                q_type = 'table' if QUESTION_TYPE in ['text2table', 'table_only'] else 'passage'
+                data_sample = construct_sample(global_id, ques, table_id, 'table')
+                all_questions_json.append(data_sample)
+                global_id += 1
 
     random.shuffle(all_questions_json)
     with open(output_PATH, 'w') as f:
