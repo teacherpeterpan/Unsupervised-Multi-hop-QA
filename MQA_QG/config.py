@@ -17,13 +17,14 @@ TABLE2TEXT_DEVICE = 3 # gpu devide to run the Table2Text module
 QUESTION_TYPE = 'table2text' # the type of question you want to generate
 # for hybridQA, the options are: 'table2text', 'text2table', 'text_only', 'table_only'
 # for hotpotQA, the options are: 'text2text', 'comparison'
+QUESTION_NUM = 3 # the number of questions to generate for each input
 
 ###### User-specified data directory
 DATA_PATH = '../Data/HybridQA/WikiTables-WithLinks/' # root data directory, '../Data/HybridQA/WikiTables-WithLinks/' for HybridQA; '../Data/HotpotQA/dataset/train.src.txt' for HotpotQA
 OUTPUT_PATH = '../Outputs/train_table_to_text.json' # the json file to store the generated questions
 DATA_RANGE = [0, 20] # for debug use: the range of the dataset you considered (use [0, -1] to use the full dataset)
 Table2Text_Model_Path = '../Pretrained_Models/table2text_GPT2_medium_ep9.pt' # the path to the pretrained Table2Text model
- 
+
 #-------------------------------END OF CONFIGURATION--------------------------------------#
 
 # QG NLP object

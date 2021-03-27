@@ -47,20 +47,20 @@ def generate_for_HybridQA(args):
     for table_id, sample_table in tqdm(all_tables):
         ques_list = None
         if QUESTION_TYPE == 'table2text':
-            ques_list = Generate_Table_to_Text_Question(sample_table)
+            ques_list = Generate_Table_to_Text_Question(sample_table, q_number=QUESTION_NUM)
         elif QUESTION_TYPE == 'text2table':
-            ques_list = Generate_Text_to_Table_Question(sample_table)
+            ques_list = Generate_Text_to_Table_Question(sample_table, q_number=QUESTION_NUM)
         elif QUESTION_TYPE == 'text_only':
-            ques_list = Generate_Text_Only_Question(sample_table)
+            ques_list = Generate_Text_Only_Question(sample_table, q_number=QUESTION_NUM)
         elif QUESTION_TYPE == 'table_only':
-            ques_list = Generate_Table_Only_Question(sample_table)
+            ques_list = Generate_Table_Only_Question(sample_table, q_number=QUESTION_NUM)
         else:
             raise(NotImplementedError)
         
         if not ques_list is None:
             for ques in ques_list:
                 q_type = 'table' if QUESTION_TYPE in ['text2table', 'table_only'] else 'passage'
-                data_sample = construct_sample(global_id, ques, table_id, 'table')
+                data_sample = construct_sample(global_id, ques, table_id, q_type)
                 all_questions_json.append(data_sample)
                 global_id += 1
 
@@ -83,7 +83,7 @@ def generate_for_HotpotQA(args):
     for passage_id, sample_passage in tqdm(all_samples):
         ques_list = None
         if QUESTION_TYPE == 'text2text':
-            ques_list = Generate_Text_to_Text_Question(sample_passage)
+            ques_list = Generate_Text_to_Text_Question(sample_passage, q_number = QUESTION_NUM)
         elif QUESTION_TYPE == 'comparison':
             ques_list = Generate_Comparison_Questions(sample_passage)
         else:

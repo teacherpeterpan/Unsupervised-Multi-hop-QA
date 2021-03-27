@@ -134,6 +134,7 @@ TABLE2TEXT_DEVICE = 3 # gpu devide to run the Table2Text module
 QUESTION_TYPE = 'table2text' # the type of question you want to generate
 # for hybridQA, the options are: 'table2text', 'text2table', 'text_only', 'table_only'
 # for hotpotQA, the options are: 'text2text', 'comparison'
+QUESTION_NUM = 3 # the number of questions to generate for each input
 
 ###### User-specified data directory
 DATA_PATH = '../Data/HybridQA/WikiTables-WithLinks/' # root data directory, '../Data/HybridQA/WikiTables-WithLinks/' for HybridQA; '../Data/HotpotQA/dataset/train.src.txt' for HotpotQA
@@ -146,6 +147,7 @@ Key parameters:
 - `EXPERIMENT`: the dataset you want to generate questions from, choose 'HotpotQA' or 'HybridQA'. 
 - `QG_DEVICE`, `BERT_DEVICE`, `TABLE2TEXT_DEVICE`: the gpu device to run the QG module, BERT module, and Table2Text module. 
 - `QUESTION_TYPE`: the type of question you want to generate. There are **6 different types of questions** you can generate. For hybridQA, the options are: 'table2text', 'text2table', 'text_only', 'table_only'. For hotpotQA, the options are: 'text2text', 'comparison'. 
+- `QUESTION_NUM`: the number of questions to generate for each input. 
 - `DATA_PATH`: root data directory, the defaults are: '../Data/HybridQA/WikiTables-WithLinks/' for HybridQA; '../Data/HotpotQA/dataset/train.src.txt' for HotpotQA. 
 - `OUTPUT_PATH`: the json file to store the generated questions
 - `Table2Text_Model_Path`: the path to the pretrained Table2Text model. 
@@ -161,24 +163,53 @@ A sample of generated (question, answer) pair for **HybridQA** is:
 ```json
 {
   "table_id": "\"Weird_Al\"_Yankovic_0",
-  "question": "Who wrote the episode that was directed by Yankovic in 2015 vs. Robin?",
-  "answer-text": "Scott Snyder",
+  "question": "In what film did the Dollmaker play the role of Batman?",
+  "answer-text": "Batman vs. Robin",
   "answer-node": [
     [
       "Batman vs. Robin",
       [
         12,
-        1,
-        0
+        1
       ],
       "/wiki/Batman_vs._Robin",
       "table"
     ]
   ],
-  "question_id": "0",
+  "question_id": "6",
   "where": "table",
-  "question_postag": "WP VBD DT NN WDT VBD VBN IN NNP IN CD IN NNP ."
+  "question_postag": "IN WDT NN VBD DT NN VB DT NN IN NNP ."
 }
+```
+
+A sample of generated (question, answer) pair for **HotpotQA** is: 
+
+```json
+{
+  "passage_id": "5a70f0c05542994082a3e404",
+  "ques_ans": [
+    {
+      "question": "When did the name that is the nickname of Baz Ashmawy begin filming Culture Clash?",
+      "answer": "September 2008"
+    },
+    {
+      "question": "How did the book that is the nickname of Baz Ashmawy travel to film Culture Clash?",
+      "answer": "travelled the world"
+    },
+    {
+      "question": "What is the common name of the song that is the name of Bazil Ashmawy 's first television show?",
+      "answer": "Baz Ashmawy"
+    }
+  ]
+}
+```
+
+(Optional) You could then rank the generated questions by the PPL under the pretrained GPT-medium model, by running the following codes: 
+
+```shell
+python run_ppl_ranking.py \
+  --input_dir ../Outputs/train_text_to_table.json \
+  --output_dir ../Outputs/PPL_rank_train_text_to_table.json
 ```
 
 ## Unsupervised Multi-hop QA

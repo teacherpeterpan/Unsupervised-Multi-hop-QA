@@ -58,9 +58,12 @@ def get_predicate(source):
 def get_row_entities(table, row_index, bridge_entity_name):
     row_entities = []
     for c_ind, col in enumerate(table['data'][row_index]):
-        for e_ind, name in enumerate(col[0]):
-            if not name == bridge_entity_name:
-                row_entities.append({'name': name, 'loc': [row_index, c_ind, e_ind], 'url': table['data'][row_index][c_ind][1][e_ind]})
+        name = col[0]
+        if not name == bridge_entity_name:
+            if len(table['data'][row_index][c_ind][1]) > 0:
+                row_entities.append({'name': name, 'loc': [row_index, c_ind, 0], 'url': table['data'][row_index][c_ind][1][0]})
+            else:
+                row_entities.append({'name': name, 'loc': [row_index, c_ind, 0], 'url': None})
     return row_entities
 
 def phrase_match(long_str, short_str):

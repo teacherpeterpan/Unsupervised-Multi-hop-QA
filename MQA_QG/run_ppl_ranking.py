@@ -5,6 +5,7 @@ from tqdm import tqdm
 import json
 import math, torch
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
+import argparse
 
 print('Loading GPT2 model......')
 model = GPT2LMHeadModel.from_pretrained('gpt2-medium')
@@ -41,6 +42,11 @@ def obtain_score_dict(input_file, output_file):
         f.write(json.dumps(sorted_scores, indent=2))
 
 if __name__ == "__main__":
-    input_file = '/mnt/edward/data/liangming/Projects/HybridQA/HybridQA/synthesized_data/train_R2.json'
-    output_file = '/mnt/edward/data/liangming/Projects/HybridQA/HybridQA/synthesized_data/R2_ranking.json'
-    obtain_score_dict(input_file, output_file)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_dir", default=None, type=str, required=True,
+                        help="Input data path.")
+    parser.add_argument("--output_dir", default=None, type=str, required=True,
+                        help="Output data path.")
+    args = parser.parse_args()
+    
+    obtain_score_dict(args.input_dir, args.output_dir)
