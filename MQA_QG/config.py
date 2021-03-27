@@ -11,24 +11,24 @@ import stanza
 
 ###### Global Settings
 EXPERIMENT = 'HybridQA' # The experiment you want to run, choose 'HotpotQA' or 'HybridQA'
-qg_gp_index = 5  # gpu device to run the QG module
-bert_gpu_index = 3 # gpu device to run the BERT module
-table_gpu_index = 3 # gpu devide to run the Table2Text module
+QG_DEVICE = 5  # gpu device to run the QG module
+BERT_DEVICE = 3 # gpu device to run the BERT module
+TABLE2TEXT_DEVICE = 3 # gpu devide to run the Table2Text module
 QUESTION_TYPE = 'table2text' # the type of question you want to generate
 # for hybridQA, the options are: 'table2text', 'text2table', 'text_only', 'table_only'
 # for hotpotQA, the options are: 'text2text', 'comparison'
 
 ###### User-specified data directory
 DATA_PATH = '../Data/HybridQA/WikiTables-WithLinks/' # root data directory, '../Data/HybridQA/WikiTables-WithLinks/' for HybridQA; '../Data/HotpotQA/dataset/train.src.txt' for HotpotQA
-output_PATH = '../Outputs/train_table_to_text.json' # the json file to store the generated questions
-data_range = [0, 20] # for debug use: the range of the dataset you considered (use [0, -1] to use the full dataset)
+OUTPUT_PATH = '../Outputs/train_table_to_text.json' # the json file to store the generated questions
+DATA_RANGE = [0, 20] # for debug use: the range of the dataset you considered (use [0, -1] to use the full dataset)
 Table2Text_Model_Path = '../Pretrained_Models/table2text_GPT2_medium_ep9.pt' # the path to the pretrained Table2Text model
  
 #-------------------------------END OF CONFIGURATION--------------------------------------#
 
 # QG NLP object
 print('Loading QG module >>>>>>>>')
-qg_nlp = T5_QG.pipeline("question-generation", model='valhalla/t5-base-qg-hl', qg_format="highlight", gpu_index = qg_gp_index)
+qg_nlp = T5_QG.pipeline("question-generation", model='valhalla/t5-base-qg-hl', qg_format="highlight", gpu_index = QG_DEVICE)
 print('QG module loaded.')
 
 table_to_text = None
@@ -38,12 +38,12 @@ if EXPERIMENT == 'HybridQA':
     table_to_text = get_GPT2_Predictor(
         Table2Text_Model_Path,
         num_samples = 1, 
-        gpu_index = table_gpu_index)
+        gpu_index = TABLE2TEXT_DEVICE)
     print('Table-to-Text module loaded.')
 
 # Load BERT_fill_blanker
 print('Loading BERT blender >>>>>>>>')
-bert_fill_blank = BERT_fill_blanker(gpu_index = bert_gpu_index)
+bert_fill_blank = BERT_fill_blanker(gpu_index = BERT_DEVICE)
 print('BERT blender loaded.')
 
 # Stanza NLP object

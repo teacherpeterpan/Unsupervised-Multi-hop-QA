@@ -9,9 +9,6 @@ from HotpotQA.reasoning import *
 import json
 from tqdm import tqdm
 
-# Stanza NLP object
-# stanza_nlp = stanza.Pipeline('en', use_gpu=True)
-
 def construct_sample(q_id, question, table_id, q_type, multi_ans_node = False):
     data_sample = {}
     data_sample['table_id'] = str(table_id)
@@ -37,7 +34,7 @@ def construct_sample(q_id, question, table_id, q_type, multi_ans_node = False):
 def generate_for_HybridQA(args):
     hybridQA = HybridQA_Dataset(args)
 
-    data_range_start, data_range_end = data_range
+    data_range_start, data_range_end = DATA_RANGE
     global_id = data_range_start
     all_tables = sorted(list(hybridQA.dataset.items()), key=lambda x: x[0])
     
@@ -68,14 +65,14 @@ def generate_for_HybridQA(args):
                 global_id += 1
 
     random.shuffle(all_questions_json)
-    with open(output_PATH, 'w') as f:
+    with open(OUTPUT_PATH, 'w') as f:
         f.write(json.dumps(all_questions_json, indent=2))
 
 def generate_for_HotpotQA(args):
     hotpotQA = HotpotQA_Dataset(args)
     
     all_samples = sorted(list(hotpotQA.dataset.items()), key=lambda x: x[0])
-    data_range_start, data_range_end = data_range
+    data_range_start, data_range_end = DATA_RANGE
     if data_range_end == -1:
         all_samples = all_samples[data_range_start:]
     else:
@@ -84,19 +81,22 @@ def generate_for_HotpotQA(args):
     all_questions_json = []
 
     for passage_id, sample_passage in tqdm(all_samples):
-        # ques_list = Generate_Text_to_Text_Question(sample_passage)
-        ques_list = Generate_Comparison_Questions(sample_passage)
+        ques_list = None
+        if QUESTION_TYPE == 'text2text':
+            ques_list = Generate_Text_to_Text_Question(sample_passage)
+        elif QUESTION_TYPE == 'comparison':
+            ques_list = Generate_Comparison_Questions(sample_passage)
+        else:
+            raise(NotImplementedError)
+        
         if not ques_list is None:
             info = {'passage_id': passage_id, "ques_ans": []}
             for ques in ques_list:
-                #try:
                 info['ques_ans'].append({"question": ques['question'], 'answer': ques['answer_text']})
-                #except:
-                #    import ipdb; ipdb.set_trace()
             all_questions_json.append(info)
     
     random.shuffle(all_questions_json)
-    with open(output_PATH, 'w') as f:
+    with open(OUTPUT_PATH, 'w') as f:
         f.write(json.dumps(all_questions_json, indent=2))
 
 if __name__ == "__main__":
