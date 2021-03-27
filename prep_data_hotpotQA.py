@@ -46,10 +46,10 @@ def build_dataset(data_path, output_path, data_split):
             QAs.append(qa_pairs)
     print('Number of samples in {}: {}'.format(data_split, len(eve_passages)))
     
-    with open(f'{output_path}{data_split}.src.txt', 'w') as f:
+    with open(f'{output_path}{data_split}.src.json', 'w') as f:
         f.write(json.dumps(eve_passages, indent=2))
 
-    with open(f'{output_path}{data_split}.qa.txt', 'w') as f:
+    with open(f'{output_path}{data_split}.qa.json', 'w') as f:
         f.write(json.dumps(QAs, indent=2))
 
 if __name__ == "__main__":
