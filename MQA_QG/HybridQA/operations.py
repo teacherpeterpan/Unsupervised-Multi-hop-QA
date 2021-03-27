@@ -94,18 +94,15 @@ linearlize the table content
 '''
 def linearlize_subtable_fullrow(sample, bridge_entity):
     table = sample['table']
-    # print(table)
     bridge_entity_loc = bridge_entity['loc']
     bridge_entity_name = bridge_entity['name']
 
     header_list = []
     for head in table['header']:
-        # print(head)
         header_list.append(head[0])
-        # header_list.append(', '.join([ele[0] for ele in head if ele[0] is not None]))
+
     table_data = []
     for row in table['data']:
-        # row_list = [', '.join(col[0]) for col in row]
         row_list = [col[0] for col in row]
         table_data.append(row_list)
 
