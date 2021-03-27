@@ -121,10 +121,34 @@ results = predictor.predict_output(flattened_table)
 print(results)
 ```
 
-
 ## Multi-hop Question Generation
 
-Coming Soon...
+After data preparation and testing operators, you could generate different types of multi-hop questions from (table, passage) in HybridQA or passages in HotpotQA. You simply need to configure your experimental setting in `MQA_QG/config.py`, as follows: 
+
+```python
+###### Global Settings
+EXPERIMENT = 'HybridQA' # The experiment you want to run, choose 'HotpotQA' or 'HybridQA'
+qg_gp_index = 5  # gpu device to run the QG module
+bert_gpu_index = 3 # gpu device to run the BERT module
+table_gpu_index = 3 # gpu devide to run the Table2Text module
+QUESTION_TYPE = 'table2text' # the type of question you want to generate
+# for hybridQA, the options are: 'table2text', 'text2table', 'text_only', 'table_only'
+# for hotpotQA, the options are: 'text2text', 'comparison'
+
+###### User-specified data directory
+DATA_PATH = '../Data/HybridQA/WikiTables-WithLinks/' # root data directory, '../Data/HybridQA/WikiTables-WithLinks/' for HybridQA; '../Data/HotpotQA/dataset/train.src.txt' for HotpotQA
+output_PATH = '../Outputs/train_table_to_text.json' # the json file to store the generated questions
+data_range = [0, 20] # for debug use: the range of the dataset you considered (use [0, -1] to use the full dataset)
+Table2Text_Model_Path = '../Pretrained_Models/table2text_GPT2_medium_ep9.pt' # the path to the pretrained Table2Text model
+```
+
+Key parameters: 
+- `EXPERIMENT`: the dataset you want to generate questions from, choose 'HotpotQA' or 'HybridQA'. 
+- `qg_gp_index`, `bert_gpu_index`, `table_gpu_index`: the gpu device to run the QG module, BERT module, and Table2Text module. 
+- `QUESTION_TYPE`: the type of question you want to generate. There are **6 different types of questions** you can generate. For hybridQA, the options are: 'table2text', 'text2table', 'text_only', 'table_only'. For hotpotQA, the options are: 'text2text', 'comparison'. 
+- `DATA_PATH`: root data directory, the defaults are: '../Data/HybridQA/WikiTables-WithLinks/' for HybridQA; '../Data/HotpotQA/dataset/train.src.txt' for HotpotQA. 
+- `output_PATH`: the json file to store the generated questions
+- `Table2Text_Model_Path`: the path to the pretrained Table2Text model. 
 
 ## Unsupervised Multi-hop QA
 

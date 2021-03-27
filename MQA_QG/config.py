@@ -23,19 +23,6 @@ DATA_PATH = '../Data/HybridQA/WikiTables-WithLinks/' # root data directory, '../
 output_PATH = '../Outputs/train_table_to_text.json' # the json file to store the generated questions
 data_range = [0, 20] # for debug use: the range of the dataset you considered (use [0, -1] to use the full dataset)
 Table2Text_Model_Path = '../Pretrained_Models/table2text_GPT2_medium_ep9.pt' # the path to the pretrained Table2Text model
-
-# output_PATH, data_range = "", "", []
-
-# if EXPERIMENT == 'HybridQA':
-#     DATA_PATH = '/mnt/edward/data/liangming/Projects/HybridQA/WikiTables-WithLinks/'
-#     output_PATH = '../HybridQA/HybridQA/synthesized_data/train_Table_Only_Part3.json'
-#     data_range = [0, 10000]
-# elif EXPERIMENT == 'HotpotQA': # /mnt/edward
-#     DATA_PATH = '/data/liangming/Projects/SpanBERT/data/dataset/train.src.txt'
-#     output_PATH = '/data/liangming/Projects/SpanBERT/data/dataset/train.qa.comparison_part9.txt'
-#     data_range = [90000, -1]
-# else:
-#     raise(NotImplementedError)
  
 #-------------------------------END OF CONFIGURATION--------------------------------------#
 
