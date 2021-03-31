@@ -252,9 +252,41 @@ You could skip this data preparation process by directly downloading the above t
 
 #### Model Training
 
-**Supervised QA Setting**: train the SpanBERT model on the human-labeled training set (`train.human.json`) and then evaluate the performance on the human-labeled validation set (`dev.human.json`). 
+In the `./Multihop_QA/HotpotQA/` folder, run `bash train.sh` to train the SpanBERT QA model. Here is an example configuration of `train.sh`: 
 
-**Unsupervised QA Setting**: train the SpanBERT model on the generated training set (`train.generated.json`) and then evaluate the performance on the human-labeled validation set (`dev.human.json`). 
+```shell
+#!/bin/bash
+set -x
+
+DATAHOME=./data
+MODELHOME=./outputs/supervised
+
+mkdir -p ${MODELHOME}
+
+export CUDA_VISIBLE_DEVICES=2
+
+python code/run_mrqa.py \
+  --do_train \
+  --do_eval \
+  --model spanbert-large-cased \
+  --train_file ${DATAHOME}/train.human.json \
+  --dev_file ${DATAHOME}/dev.human.json \
+  --train_batch_size 32 \
+  --eval_batch_size 32 \
+  --gradient_accumulation_steps 8 \
+  --learning_rate 2e-5 \
+  --num_train_epochs 4 \
+  --max_seq_length 512 \
+  --doc_stride 128 \
+  --eval_per_epoch 10 \
+  --output_dir ${MODELHOME} \
+```
+
+There are two typical settings: 
+
+- **Supervised QA Setting**: train the SpanBERT model on the human-labeled training set (`train.human.json`) and then evaluate the performance on the human-labeled validation set (`dev.human.json`). 
+
+- **Unsupervised QA Setting**: train the SpanBERT model on the generated training set (`train.generated.json`) and then evaluate the performance on the human-labeled validation set (`dev.human.json`). 
 
 #### Evaluation
 

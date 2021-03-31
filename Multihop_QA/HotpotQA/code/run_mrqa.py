@@ -27,6 +27,8 @@ from mrqa_official_eval import exact_match_score, f1_score, metric_max_over_grou
 from basic_tokenizer import SimpleTokenizer
 import unicodedata
 
+from tqdm import tqdm
+
 PRED_FILE = "predictions.json"
 EVAL_FILE = "eval_results.txt"
 TEST_FILE = "test_results.txt"
@@ -120,11 +122,8 @@ class InputFeatures(object):
 
 def read_mrqa_examples(input_file, is_training):
     """Read a MRQA json file into a list of MRQAExample."""
-    # with gzip.GzipFile(input_file, 'r') as reader:
     with open(input_file, 'r', encoding='utf-8') as f:
         # skip header
-        # content = reader.read().decode('utf-8').strip().split('\n')[1:]
-        # input_data = [json.loads(line) for line in content]
         content = f.read().strip().split('\n')
         input_data = [json.loads(line) for line in content]
 
@@ -136,11 +135,12 @@ def read_mrqa_examples(input_file, is_training):
 
     examples = []
     num_answers = 0
-    for i, entry in enumerate(input_data):
-        if i % 1000 == 0:
-            logger.info("Processing %d / %d.." % (i, len(input_data)))
+    logger.info('Loading examples...')
+    for i, entry in tqdm(enumerate(input_data), total=len(input_data)):
+        #if i % 1000 == 0:
+        #    logger.info("Processing %d / %d.." % (i, len(input_data)))
         paragraph_text = entry["context"]
-	# handle yes/no
+	    # handle yes/no
         if paragraph_text.endswith("( yes or no )"):
             paragraph_text = paragraph_text.replace("( yes or no )", "")
 
@@ -171,9 +171,6 @@ def read_mrqa_examples(input_file, is_training):
                 assert len(answers) == 1
                 answers = [_["answer_text"] for _ in answers]
                 matched_answers = match_answer_span(paragraph_text, answers, simple_tok)
-                # import ipdb
-                # ipdb.set_trace()
-                # import pdb; pdb.set_trace()
                 try:
                     assert len(matched_answers) > 0
                 except:
@@ -191,10 +188,8 @@ def read_mrqa_examples(input_file, is_training):
                 # take first span
                 char_start, char_end = spans[0][0], spans[0][1]
                 orig_answer_text = paragraph_text[char_start:char_end+1]
-                # import pdb; pdb.set_trace()
 
                 start_position, end_position = char_to_word_offset[char_start], char_to_word_offset[char_end]
-                # num_answers += sum([len(spans['char_spans']) for spans in answers])
 
             example = MRQAExample(
                 qas_id=qas_id,
@@ -204,7 +199,7 @@ def read_mrqa_examples(input_file, is_training):
                 start_position=start_position,
                 end_position=end_position)
             examples.append(example)
-    logger.info('Num avg answers: {}'.format(num_answers / len(examples)))
+
     return examples
 
 
@@ -215,7 +210,8 @@ def convert_examples_to_features(examples, tokenizer, max_seq_length,
     unique_id = 1000000000
 
     features = []
-    for (example_index, example) in enumerate(examples):
+    logger.info('Converting examples to features...')
+    for (example_index, example) in tqdm(enumerate(examples), total=len(examples)):
         query_tokens = tokenizer.tokenize(example.question_text)
 
         if len(query_tokens) > max_query_length:
@@ -324,28 +320,30 @@ def convert_examples_to_features(examples, tokenizer, max_seq_length,
                     doc_offset = len(query_tokens) + 2
                     start_position = tok_start_position - doc_start + doc_offset
                     end_position = tok_end_position - doc_start + doc_offset
-            if example_index < 5:
-                logger.info("*** Example ***")
-                logger.info("unique_id: %s" % (unique_id))
-                logger.info("example_index: %s" % (example_index))
-                logger.info("doc_span_index: %s" % (doc_span_index))
-                logger.info("tokens: %s" % " ".join(tokens))
-                logger.info("token_to_orig_map: %s" % " ".join([
-                    "%d:%d" % (x, y) for (x, y) in token_to_orig_map.items()]))
-                logger.info("token_is_max_context: %s" % " ".join([
-                    "%d:%s" % (x, y) for (x, y) in token_is_max_context.items()
-                ]))
-                logger.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
-                logger.info(
-                    "input_mask: %s" % " ".join([str(x) for x in input_mask]))
-                logger.info(
-                    "segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
-                if is_training:
-                    answer_text = " ".join(tokens[start_position:(end_position + 1)])
-                    logger.info("start_position: %d" % (start_position))
-                    logger.info("end_position: %d" % (end_position))
-                    logger.info(
-                        "answer: %s" % (answer_text))
+            
+            # FOR DEBUG ONLY
+            # if example_index < 5:
+            #     logger.info("*** Example ***")
+            #     logger.info("unique_id: %s" % (unique_id))
+            #     logger.info("example_index: %s" % (example_index))
+            #     logger.info("doc_span_index: %s" % (doc_span_index))
+            #     logger.info("tokens: %s" % " ".join(tokens))
+            #     logger.info("token_to_orig_map: %s" % " ".join([
+            #         "%d:%d" % (x, y) for (x, y) in token_to_orig_map.items()]))
+            #     logger.info("token_is_max_context: %s" % " ".join([
+            #         "%d:%s" % (x, y) for (x, y) in token_is_max_context.items()
+            #     ]))
+            #     logger.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
+            #     logger.info(
+            #         "input_mask: %s" % " ".join([str(x) for x in input_mask]))
+            #     logger.info(
+            #         "segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
+            #     if is_training:
+            #         answer_text = " ".join(tokens[start_position:(end_position + 1)])
+            #         logger.info("start_position: %d" % (start_position))
+            #         logger.info("end_position: %d" % (end_position))
+            #         logger.info(
+            #             "answer: %s" % (answer_text))
 
             features.append(
                 InputFeatures(
@@ -654,9 +652,9 @@ def evaluate(args, model, device, eval_dataset, eval_dataloader,
              eval_examples, eval_features, verbose=True):
     all_results = []
     model.eval()
-    for input_ids, input_mask, segment_ids, example_indices in eval_dataloader:
-        if len(all_results) % 1000 == 0:
-            logger.info("Processing example: %d" % (len(all_results)))
+    for input_ids, input_mask, segment_ids, example_indices in tqdm(eval_dataloader, total=len(eval_dataloader)):
+        # if len(all_results) % 1000 == 0:
+        #     logger.info("Processing example: %d" % (len(all_results)))
         input_ids = input_ids.to(device)
         input_mask = input_mask.to(device)
         segment_ids = segment_ids.to(device)
@@ -685,9 +683,7 @@ def evaluate(args, model, device, eval_dataset, eval_dataloader,
 
 def main(args):
     device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
-    # device = torch.device("cuda:{}".format(args.gpu_index))
     n_gpu = torch.cuda.device_count()
-    # n_gpu = 1
     logger.info("device: {}, n_gpu: {}, 16-bits training: {}".format(
         device, n_gpu, args.fp16))
 
@@ -1015,7 +1011,6 @@ if __name__ == "__main__":
                                  "0 (default value): dynamic loss scaling.\n"
                                  "Positive power of 2: static loss scaling value.\n")
 
-        parser.add_argument("--gpu_index", default=0, type=int, help="GPU index")
         args = parser.parse_args()
 
         main(args)
