@@ -10,6 +10,7 @@ Pretrained_Models/*.pt
 Outputs/*
 Multihop_QA/HotpotQA/data/*.json
 Multihop_QA/HotpotQA/outputs/*
+Multihop_QA/HybridQA/data/*/*.json
 
 # C extensions
 *.so

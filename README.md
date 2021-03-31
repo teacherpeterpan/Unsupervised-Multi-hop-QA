@@ -317,7 +317,13 @@ After evaluation, two files will be outputed to the model path:
 
 ### b) HybridQA
 
-Coming Soon...
+We use the [HYBRIDER](https://github.com/wenhuchen/HybridQA) (Chen et al., 2020b) as the QA model for HybridQA. 
+
+#### Data Preparation
+
+#### Model Training
+
+#### Evaluation
 
 ## Reference
 Please cite the paper in the following format if you use this dataset during your research.
