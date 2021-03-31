@@ -915,43 +915,43 @@ def main(args):
             f_result = open(os.path.join(args.output_dir, 'test_results.txt'), "w")
 
             # list of test files
-            testing_files = ['dev.human', 'dev.human.bridge', 'dev.human.comparison']
-            for testing_file in testing_files:
-                test_path = args.test_file + '/' + testing_file + '.txt'
-                with open(test_path, 'r', encoding='utf-8') as f:
-                    content = f.read().strip().split('\n')
-                    eval_dataset = [json.loads(line) for line in content]
-                eval_examples = read_mrqa_examples(
-                    input_file=test_path, is_training=False)
-                eval_features = convert_examples_to_features(
-                    examples=eval_examples,
-                    tokenizer=tokenizer,
-                    max_seq_length=args.max_seq_length,
-                    doc_stride=args.doc_stride,
-                    max_query_length=args.max_query_length,
-                    is_training=False)
-                logger.info("***** Test *****")
-                logger.info("  Num orig examples = %d", len(eval_examples))
-                logger.info("  Num split examples = %d", len(eval_features))
-                logger.info("  Batch size = %d", args.eval_batch_size)
-                all_input_ids = torch.tensor([f.input_ids for f in eval_features], dtype=torch.long)
-                all_input_mask = torch.tensor([f.input_mask for f in eval_features], dtype=torch.long)
-                all_segment_ids = torch.tensor([f.segment_ids for f in eval_features], dtype=torch.long)
-                all_example_index = torch.arange(all_input_ids.size(0), dtype=torch.long)
-                eval_data = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_example_index)
-                eval_dataloader = DataLoader(eval_data, batch_size=args.eval_batch_size)
+            # testing_files = ['dev.human', 'dev.human.bridge', 'dev.human.comparison']
+            # for testing_file in testing_files:
+            test_path = args.test_file
+            with open(test_path, 'r', encoding='utf-8') as f:
+                content = f.read().strip().split('\n')
+                eval_dataset = [json.loads(line) for line in content]
+            eval_examples = read_mrqa_examples(
+                input_file=test_path, is_training=False)
+            eval_features = convert_examples_to_features(
+                examples=eval_examples,
+                tokenizer=tokenizer,
+                max_seq_length=args.max_seq_length,
+                doc_stride=args.doc_stride,
+                max_query_length=args.max_query_length,
+                is_training=False)
+            logger.info("***** Test *****")
+            logger.info("  Num orig examples = %d", len(eval_examples))
+            logger.info("  Num split examples = %d", len(eval_features))
+            logger.info("  Batch size = %d", args.eval_batch_size)
+            all_input_ids = torch.tensor([f.input_ids for f in eval_features], dtype=torch.long)
+            all_input_mask = torch.tensor([f.input_mask for f in eval_features], dtype=torch.long)
+            all_segment_ids = torch.tensor([f.segment_ids for f in eval_features], dtype=torch.long)
+            all_example_index = torch.arange(all_input_ids.size(0), dtype=torch.long)
+            eval_data = TensorDataset(all_input_ids, all_input_mask, all_segment_ids, all_example_index)
+            eval_dataloader = DataLoader(eval_data, batch_size=args.eval_batch_size)
 
-                result, preds, nbest_preds = \
-                    evaluate(args, model, device, eval_dataset,
-                            eval_dataloader, eval_examples, eval_features)
-                
-                with open(os.path.join(args.output_dir, testing_file + '.pred'), "w") as writer:
-                    writer.write(json.dumps(preds, indent=4) + "\n")
-                
-                f_result.write('Evaluation for {}\n'.format(testing_file))
-                for key in sorted(result.keys()):
-                    f_result.write("%s = %s\n" % (key, str(result[key])))
-                f_result.write('\n')
+            result, preds, nbest_preds = \
+                evaluate(args, model, device, eval_dataset,
+                        eval_dataloader, eval_examples, eval_features)
+            
+            with open(os.path.join(args.output_dir, 'predictions.txt'), "w") as writer:
+                writer.write(json.dumps(preds, indent=4) + "\n")
+            
+            f_result.write('Evaluation for {}\n'.format(test_path))
+            for key in sorted(result.keys()):
+                f_result.write("%s = %s\n" % (key, str(result[key])))
+            f_result.write('\n')
             f_result.close()
 
 if __name__ == "__main__":

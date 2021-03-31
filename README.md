@@ -290,7 +290,30 @@ There are two typical settings:
 
 #### Evaluation
 
-Coming Soon...
+In the `./Multihop_QA/HotpotQA/` folder, run `bash evaluate.sh` to train the SpanBERT QA model. Here is an example configuration of `evaluate.sh`: 
+
+```shell
+set -x
+
+DATAHOME=./data/dev.human.json
+MODELHOME=./outputs/unsupervised
+
+export CUDA_VISIBLE_DEVICES=4
+
+python code/run_mrqa.py \
+  --do_eval \
+  --eval_test \
+  --model spanbert-large-cased \
+  --test_file ${DATAHOME} \
+  --eval_batch_size 32 \
+  --max_seq_length 512 \
+  --doc_stride 128 \
+  --output_dir ${MODELHOME}
+```
+
+After evaluation, two files will be outputed to the model path: 
+- `test_results.txt`: reporting the EM and F1. 
+- `predictions.txt`: saving the QA results. 
 
 ### b) HybridQA
 

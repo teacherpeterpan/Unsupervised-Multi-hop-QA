@@ -2,8 +2,8 @@
 
 set -x
 
-DATAHOME=../data/processed_for_qa
-MODELHOME=../models_new/unsupervised_paraphrase
+DATAHOME=./data/dev.human.json
+MODELHOME=./outputs/unsupervised
 
 export CUDA_VISIBLE_DEVICES=4
 
