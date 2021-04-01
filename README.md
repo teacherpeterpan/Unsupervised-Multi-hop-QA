@@ -355,7 +355,9 @@ You could skip this data preparation process by directly downloading the above t
 
 #### Model Training
 
-In the `./Multihop_QA/HybridQA/` folder, run `bash train.sh` to train the SpanBERT QA model. Here is an example configuration of `train.sh`: 
+**Note that training the HYBRIDER model requires `transformer==2.6.0`**
+
+In the `./Multihop_QA/HybridQA/` folder, run `bash train.sh` to train the HYBRIDER QA model. Here is an example configuration of `train.sh`: 
 
 ```shell
 python train_stage12.py \
