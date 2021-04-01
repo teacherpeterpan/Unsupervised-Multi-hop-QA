@@ -351,7 +351,7 @@ This will create two folders in the `./Multihop_QA/HybridQA/data/` directory:
 - `generated`: the processed generated train set. 
 - `human`: the processed human-labeled train and dev set. 
 
-You could skip this data preparation process by directly downloading the above two folders [here](). 
+You could skip this data preparation process by directly downloading the above two folders [here](https://drive.google.com/drive/folders/10hW_fssUBrhKUQH_4dQI2Q7GBPjHRwS_?usp=sharing). 
 
 #### Model Training
 
