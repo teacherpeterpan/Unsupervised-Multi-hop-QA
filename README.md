@@ -85,7 +85,7 @@ cd HYBRID_HOME
 git clone https://github.com/wenhuchen/WikiTables-WithLinks
 ```
 
-The human annotated questions can be found [here](https://github.com/wenhuchen/HybridQA/tree/master/released_data). Download `train.json` and `dev.json`. Rename them as `train.human.json` and `dev.human.json`, and put them into `./Data/HybridQA` folder. 
+The human annotated questions can be found [here](https://github.com/wenhuchen/HybridQA/tree/master/released_data). Download `train.json`, `dev.json`, and `dev_reference.json`. Rename `train.json` as `train.human.json`; rename `dev.json` as `dev.human.json`, and put them into `./Data/HybridQA` folder. 
 
 ## Operators
 
@@ -355,7 +355,55 @@ You could skip this data preparation process by directly downloading the above t
 
 #### Model Training
 
+In the `./Multihop_QA/HybridQA/` folder, run `bash train.sh` to train the SpanBERT QA model. Here is an example configuration of `train.sh`: 
+
+```shell
+python train_stage12.py \
+    --do_lower_case \
+    --do_train \
+    --train_file ./data/human/stage1_train_data.json \
+    --resource_dir ../../Data/HybridQA/WikiTables-WithLinks \
+    --learning_rate 2e-6 \
+    --option stage1 \
+    --num_train_epochs 3.0 \
+    --gpu_index 6 \
+    --cache_dir ./tmp/
+
+python train_stage12.py \
+    --do_lower_case \
+    --do_train \
+    --train_file ./data/human/stage2_train_data.json \
+    --resource_dir ../../Data/HybridQA/WikiTables-WithLinks \
+    --learning_rate 5e-6 \
+    --option stage2 \
+    --num_train_epochs 3.0 \
+    --gpu_index 6 \
+    --cache_dir ./tmp/
+
+python train_stage3.py \
+    --do_train  \
+    --do_lower_case \
+    --train_file ./data/human/stage3_train_data.json \
+    --resource_dir ../../Data/HybridQA/WikiTables-WithLinks \
+    --per_gpu_train_batch_size 12 \
+    --learning_rate 3e-5 \
+    --num_train_epochs 4.0 \
+    --max_seq_length 384 \
+    --doc_stride 128 \
+    --threads 8 \
+    --gpu_index 6 \
+    --cache_dir ./tmp/
+```
+
+There are two typical settings: 
+
+- **Supervised QA Setting**: train the HYBRIDER model on the human-labeled training set. Set the `train_file` as `./data/human/stage1(2)(3)_train_data.json`. 
+
+- **Unsupervised QA Setting**: train the HYBRIDER model on the generated training set. Set the `train_file` as `./data/generated/stage1(2)(3)_train_data.json`. 
+
 #### Evaluation
+
+In the `./Multihop_QA/HybridQA/` folder, run `bash evaluate.sh` to evaluate the HYBRIDER QA model. 
 
 ## Reference
 Please cite the paper in the following format if you use this dataset during your research.

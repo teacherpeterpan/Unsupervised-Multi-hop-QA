@@ -6,7 +6,7 @@ python train_stage12.py \
     --learning_rate 2e-6 \
     --option stage1 \
     --num_train_epochs 3.0 \
-    --gpu_index 1 \
+    --gpu_index 6 \
     --cache_dir ./tmp/
 
 python train_stage12.py \
@@ -17,7 +17,7 @@ python train_stage12.py \
     --learning_rate 5e-6 \
     --option stage2 \
     --num_train_epochs 3.0 \
-    --gpu_index 2 \
+    --gpu_index 6 \
     --cache_dir ./tmp/
 
 python train_stage3.py \
@@ -31,5 +31,5 @@ python train_stage3.py \
     --max_seq_length 384 \
     --doc_stride 128 \
     --threads 8 \
-    --gpu_index 4 \
+    --gpu_index 6 \
     --cache_dir ./tmp/
