@@ -17,13 +17,14 @@ from multiprocessing import Pool
 import os
 from tqdm import tqdm
 import pytz
+import argparse
 
 utc=pytz.UTC
 
 stopWords = set(stopwords.words('english'))
 tfidf = TfidfVectorizer(strip_accents="unicode", ngram_range=(2, 3), stop_words=stopWords)
 tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-resource_path = '../WikiTables-WithLinks/'
+resource_path = './Data/HybridQA/WikiTables-WithLinks/'
 best_threshold = 0.80
 
 def url2text(url):
@@ -515,9 +516,9 @@ def prepare_stage3_data(data):
         
     return split
 
-def preprocess_pipeline(data_folder, data_split, output_dir):
+def preprocess_pipeline(input_path, data_split, output_dir):
     ## load raw data
-    with open(f'{data_folder}{data_split}.json', 'r') as f:
+    with open(input_path, 'r') as f:
         dev_data = json.load(f)
 
     if not os.path.exists(output_dir):
@@ -625,12 +626,17 @@ def preprocess_pipeline(data_folder, data_split, output_dir):
         json.dump(results, f, indent=2)
 
 if __name__ == "__main__":
-    # aug1: input path
-    # aug2: input file name
-    # aug3: output path
-    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_path", default=None, type=str, required=True,
+                        help="Path of HybridQA source data.")
+    parser.add_argument("--data_split", default=None, type=str, required=True,
+                        help="Data split: train or dev.")
+    parser.add_argument("--output_path", default=None, type=str, required=True,
+                        help="Output data path.")
+    args = parser.parse_args()
+
     # preprocess_pipeline('synthesized_data/', 'train_top100000_New', '../Data/processed/R1_R2_top100000')
     # preprocess_pipeline('synthesized_data/', 'train_R2_New', '../Data/processed/R2_Only')
     # preprocess_pipeline('synthesized_data/', 'train_Table_Only_New', '../Data/processed/Table_Only')
     # preprocess_pipeline('synthesized_data/', 'train_Text_Only_New', '../Data/processed/Text_Only')
-    preprocess_pipeline('synthesized_data/', 'train_top100000_paraphrase_new', '../Data/processed/Paraphrase_New')
+    preprocess_pipeline(args.input_path, args.data_split, args.output_path)

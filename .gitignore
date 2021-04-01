@@ -11,6 +11,8 @@ Outputs/*
 Multihop_QA/HotpotQA/data/*.json
 Multihop_QA/HotpotQA/outputs/*
 Multihop_QA/HybridQA/data/*/*.json
+Multihop_QA/HybridQA/data/*.json
+tables_tmp/
 
 # C extensions
 *.so
